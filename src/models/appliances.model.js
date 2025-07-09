@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 
-const applianceSchema = new mongoose.Schema({
-  applianceName: { type: String, required: true },
+const ratedApplianceSchema = new mongoose.Schema({
+  applianceName: { type: String, required: true, unique: true },
   powerRating: { type: Number, required: true }
-});
+},
 
-module.exports = mongoose.model('Appliance', applianceSchema);
+{ versionKey: false }
+
+);
+
+module.exports = mongoose.model('Appliance', ratedApplianceSchema);

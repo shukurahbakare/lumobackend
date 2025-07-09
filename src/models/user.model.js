@@ -1,15 +1,28 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const ApplianceSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  phone: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  count: { type: Number, required: true, min: 0 }
+}, 
+
+{ _id: false }
+
+);
+
+const UserSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  phone: { type: String, required: true, trim: true, unique: true },
+  email: { type: String, required: true, trim: true, unique: true },
+  password: { type: String },
   buildingType: { type: String, required: true,
      enum: ['Apartment', 'Bungalow', 'Villa', 'Mansion', 'Duplex', 'Studio Apartment'] },
   energyHours: { type: Number, required: true },
-  appliances: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appliance' }]
+  appliances: { type: [ApplianceSchema], default: [] },
+  totalPower: { type: Number, default: 0 }
+}, 
 
-});
+{ timestamps: true }
 
-module.exports = mongoose.model('User', userSchema);
+);
+
+module.exports = mongoose.model('User', UserSchema);
