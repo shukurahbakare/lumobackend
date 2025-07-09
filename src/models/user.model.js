@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const ApplianceSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  applianceName: { type: String, required: true },
   count: { type: Number, required: true, min: 0 }
 }, 
 

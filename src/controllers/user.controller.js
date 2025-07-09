@@ -5,40 +5,48 @@ const Appliance = require('../models/appliances.model');
 
 exports.signup = async (req, res) => {
   try {
-    const { name, email, phone, buildingType, appliances, energyHours } = req.body;
+    const { name, email, phone, buildingType, appliances, totalPower, energyHours } = req.body;
 
-    if (!name || !email || !phone || !buildingType || !appliances || !energyHours) {
+    if (!name || !email || !phone || !buildingType || !appliances || !totalPower || !energyHours) {
       return res.status(400).json({ message: 'All fields are required.' });
     }
 
-    let totalPower = 0;
+    //calaculating total power based on appliances {for when its ever needed}
+    // let totalPower = 0;
 
-    for (const appliance of appliances) {
-      const applianceDoc = await Appliance.findOne({
-        applianceName: appliance.name
-      }).select('powerRating');
+    // for (const appliance of appliances) {
+    //   const applianceDoc = await Appliance.findOne({
+    //     applianceName: appliance.name
+    //   }).select('powerRating');
 
 
-      if (!applianceDoc) {
-        continue;
-      }
+    //   if (!applianceDoc) {
+    //     continue;
+    //   }
 
-      totalPower += appliance.count * applianceDoc.powerRating;
-    }
+    //   totalPower += appliance.count * applianceDoc.powerRating;
+    // }
 
     const newUser = new User({
       name,
       email,
       phone,
       buildingType,
-      energyHours,
       appliances,
+      totalPower,
+      energyHours,
     });
 
     await newUser.save();
-    res.status(201).json({ message: 'User created successfully', user: newUser, totalPower });
+    res.status(201).json({ message: 'User created successfully', user: newUser,
+      redirectUrl: `/api/v1/recommendations/${newUser._id}`
+     });
+
   } catch (error) {
     console.log('Error creating user:', error);
     res.status(500).json({ message: 'Error creating user'});
   }
 };
+
+
+

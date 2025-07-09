@@ -7,5 +7,5 @@ const adminSchema = new mongoose.Schema({
   role: { type: String, required: true, enum: ['admin', 'superadmin'], default: 'admin' },
 });
 
-module.exports = mongoose.model('Admin', adminSchema);
+module.exports = mongoose.model('Admin', adminSchema); 
 
