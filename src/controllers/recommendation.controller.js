@@ -21,7 +21,12 @@ exports.getRecommendations = async (req, res) => {
         package.maxPower >= user.totalPower &&
         package.fullChargeHours >= user.energyHours); 
 
-    
+    if (solarPackageRecommendations.length > 3) {
+      solarPackageRecommendations.sort((a, b) => a.maxPower - b.maxPower);
+      solarPackageRecommendations.length = 3; 
+    }
+
+
     //     //if less than 3 packages match, find extras
     // if (solarPackageRecommendations.length < 3) { 
     //   const extras = solarPackages
