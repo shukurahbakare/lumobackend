@@ -1,12 +1,10 @@
 const User = require('../models/user.model');
-const Appliance = require('../models/appliances.model');
-const Recommendations = require('../models/solarRecommendations.model');
+const SolarPackage = require('../models/solarpackages.model');
 
 exports.getRecommendations = async (req, res) => {
-  try {
     const { userID } = req.params;
-
-    if (!userID) {
+  try {
+    if (!req.params.userID) {
       return res.status(400).json({ message: 'Signup to get recommendations.', url: '/api/v1/user/signup' });
     }                                                                           //update before deploying
 
@@ -16,7 +14,7 @@ exports.getRecommendations = async (req, res) => {
       return res.status(404).json({ message: 'User not found.' });
     }
 
-    const solarPackages = await Recommendations.find();
+    const solarPackages = await SolarPackage.find();
 
     const solarPackageRecommendations = solarPackages.filter(package => 
         package.buildingType.toLowerCase() === user.buildingType.toLowerCase() &&
@@ -24,22 +22,22 @@ exports.getRecommendations = async (req, res) => {
         package.fullChargeHours >= user.energyHours); 
 
     
-        //if less than 3 packages match, find extras
-    if (solarPackageRecommendations.length < 3) { 
-      const extras = solarPackages
-        .filter(package => !solarPackageRecommendations.includes(package)) // exclude already included packages
-        .sort((a, b) => {              
-          // Closest power range to user.totalPower
-          const diffA = Math.abs(user.totalPower - a.maxPower);
-          const diffB = Math.abs(user.totalPower - b.maxPower);
-          return diffA - diffB;
-        })
-        .slice(0, 3 - solarPackageRecommendations.length); // only take what's needed
+    //     //if less than 3 packages match, find extras
+    // if (solarPackageRecommendations.length < 3) { 
+    //   const extras = solarPackages
+    //     .filter(package => !solarPackageRecommendations.includes(package)) // exclude already included packages
+    //     .sort((a, b) => {              
+    //       // Closest power range to user.totalPower
+    //       const diffA = Math.abs(user.totalPower - a.maxPower);
+    //       const diffB = Math.abs(user.totalPower - b.maxPower);
+    //       return diffA - diffB;
+    //     })
+    //     .slice(0, 3 - solarPackageRecommendations.length); // only take what's needed
 
-      solarPackageRecommendations = [...solarPackageRecommendations, ...extras];
-    }
+    //   solarPackageRecommendations = [...solarPackageRecommendations, ...extras];
+    // }
 
-    res.status(200).json({ recommendations, totalPower });
+    res.status(200).json({ solarPackageRecommendations, message: 'Recommendations fetched successfully' });
   } catch (error) {
     console.error('Error fetching recommendations:', error);
     res.status(500).json({ message: 'Error fetching recommendations' });

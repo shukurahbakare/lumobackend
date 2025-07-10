@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
      enum: ['Apartment', 'Bungalow', 'Villa', 'Mansion', 'Duplex', 'Studio Apartment'] },
   energyHours: { type: Number, required: true },
   appliances: { type: [ApplianceSchema], default: [] },
-  totalPower: { type: Number, default: 0 }
+  totalPower: { type: Number, required: true }
 }, 
 
 { timestamps: true }
