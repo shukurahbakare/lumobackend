@@ -26,7 +26,7 @@ exports.getRecommendations = async (req, res) => {
       solarPackageRecommendations.length = 3; 
     }
 
-
+    
     //     //if less than 3 packages match, find extras
     // if (solarPackageRecommendations.length < 3) { 
     //   const extras = solarPackages
