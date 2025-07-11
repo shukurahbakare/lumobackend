@@ -11,6 +11,16 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required.' });
     }
 
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User with this email already exists.' });
+    }
+
+    const existingPhone = await User.findOne({ phone });
+    if (existingPhone) {
+      return res.status(400).json({ message: 'User with this phone number already exists.' });
+    }
+
     //calaculating total power based on appliances {for when its ever needed}
     // let totalPower = 0;
 
