@@ -18,7 +18,8 @@ const UserSchema = new mongoose.Schema({
      enum: ['Apartment', 'Bungalow', 'Villa', 'Mansion', 'Duplex', 'Studio Apartment'] },
   energyHours: { type: Number, required: true },
   appliances: { type: [ApplianceSchema], default: [] },
-  totalPower: { type: Number, required: true }
+  totalPower: { type: Number, required: true },
+  paymentStatus: {type: String, enum: ['success', 'pending', 'failed']}
 }, 
 
 { timestamps: true }

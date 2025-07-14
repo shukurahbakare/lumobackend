@@ -1,5 +1,7 @@
 const User = require('../models/user.model');
 const Appliance = require('../models/appliances.model');
+const package = require('../models/solarpackages.model');
+const { generatePaymentLink } = require('../services/flutterwave');
 
 
 
@@ -59,4 +61,30 @@ exports.signup = async (req, res) => {
 };
 
 
+exports.payment = async (req, res) => {
+  try {
+    const { userID } = req.params;
+    const { package } = req.body;
+
+    if (!userID) {
+      return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    const user = await User.findById(userID);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const selectedPackage = await package.findById(packageID);
+
+    const paymentLink = await generatePaymentLink(user.email, selectedPackage._id); 
+    user.paymentStatus = 'pending'; // Update payment status to pending
+    await user.save();
+
+    res.status(200).json({ message: 'Payment initiated successfully', paymentLink });
+  } catch (error) {
+    console.error('Error processing payment:', error);
+    res.status(500).json({ message: 'Error processing payment' });
+  }
+}
 

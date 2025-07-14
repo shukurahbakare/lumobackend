@@ -13,7 +13,7 @@ exports.uploadAppliance = async (req, res) => {
     const existing = await Appliance.findOne({ applianceName: { $regex: new RegExp(`^${applianceName}$`, 'i') } });
                                                                   // Used regex to make search case-insensitive
     if (existing) { 
-      return res.status(409).json({ message: 'Appliance with this name already exists.' });
+      return res.status(400).json({ message: 'Appliance with this name already exists.' });
     }
 
     const newAppliance = new Appliance({ applianceName, powerRating });
