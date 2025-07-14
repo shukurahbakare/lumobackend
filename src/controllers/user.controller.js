@@ -101,12 +101,12 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
     const payload = req.body;
 
     if (payload.event === 'charge.completed') {
-        const txRef = payload.data.tx_ref;
-        //const userID = tx_Ref.split('_')[1]; 
-        //const user = await User.findById(userID); 
-        const status = payload.data.status;
-        const amount = payload.data.amount;
-        const email = payload.data.customer.email;
+      const txRef = payload.data.tx_ref;
+      //const userID = tx_Ref.split('_')[1]; 
+      //const user = await User.findById(userID); 
+      const status = payload.data.status;
+      const amount = payload.data.amount;
+      const email = payload.data.customer.email;
 
         if (status === 'successful') {
             const user = await User.findOne({ email });
@@ -114,12 +114,12 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
                     return res.status(404).send('User not found');
                 }
 
-                user.paymentStatus = 'success';
-                user.paymentRef = txRef;
-                await user.save();
+            user.paymentStatus = 'success';
+            user.paymentRef = txRef;
+            await user.save();
 
-                console.log(`Payment verified and recorded for ${email}, amount paid: ${amount}`);
-                return res.status(200).json({ success: true });
+          console.log(`Payment verified and recorded for ${email}, amount paid: ${amount}`);
+          return res.status(200).json({ success: true });
         }
     }
   } catch (error) {
@@ -129,3 +129,4 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
   return res.status(200).send('Webhook received');
 
 }; 
+
