@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/user/flutterwave/webhook', express.raw({ type: 'application/json' }));
 app.use('/api/v1/appliances', appliancesRoutes);
 
 

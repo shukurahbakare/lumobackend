@@ -14,7 +14,7 @@ const generatePaymentLink = async (email, packageID) => {
         const response = await axios.post(
             'https://api.flutterwave.com/v3/payments',
             {
-                tx_ref: `TX_${user.email}_${Date.now()}`,
+                tx_ref: `TX_${user._id}_${Date.now()}`,
                 amount: selectedPackage.amount, 
                 currency: 'NGN',
                 redirect_url: 'http://localhost:4900/auth/google/dashboard', //frontend confirmation url

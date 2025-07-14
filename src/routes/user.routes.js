@@ -5,5 +5,6 @@ const recommendationsController = require('../controllers/recommendation.control
 
 router.post('/signup', userController.signup);
 router.get('/recommendations/:userID', recommendationsController.getRecommendations);
+router.post('/flutterwave/webhook', userController.handleFlutterwaveWebhook)
 
 module.exports = router;
