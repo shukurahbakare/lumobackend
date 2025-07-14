@@ -3,7 +3,7 @@ const router = express.Router();
 const paymentController = require('../controllers/payment.controller')
 
 
-router.post('/flutterwave/webhook', paymentController.handleFlutterwaveWebhook); 
+router.post('/flutterwave/webhook', express.raw({ type: 'application/json' }), paymentController.handleFlutterwaveWebhook); 
 
 
 module.exports = router; 
