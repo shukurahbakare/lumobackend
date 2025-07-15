@@ -8,7 +8,7 @@ const { generatePaymentLink } = require('../services/flutterwave')
 exports.payment = async (req, res) => {
   try {
     const { userID } = req.params;
-    const { packageName } = req.body;
+    const { packageID } = req.body;
 
     if (!userID) {
       return res.status(400).json({ message: 'User ID is required.' });
@@ -19,7 +19,7 @@ exports.payment = async (req, res) => {
       return res.status(404).json({ message: 'User not found.' });
     }
 
-    const selectedPackage = await SolarPackage.findOne({ packageName });
+    const selectedPackage = await SolarPackage.findById(packageID );
 
     const paymentLink = await generatePaymentLink(user.email, selectedPackage.packageName); 
     const getPayment = new Payment ({  // Create new payment 
@@ -50,7 +50,7 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
 
     if (payload.event === 'charge.completed') {
       const txRef = payload.data.tx_ref;
-      const userID = tx_Ref.split('_')[1]; 
+      const userID = txRef.split('_')[1]; 
       const status = payload.data.status;
       const amount = payload.data.amount;
       const email = payload.data.customer.email;
