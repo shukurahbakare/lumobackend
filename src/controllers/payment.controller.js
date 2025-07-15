@@ -25,7 +25,7 @@ exports.payment = async (req, res) => {
     const getPayment = new Payment ({  // Create new payment 
         userID: user._id,
         packageName: selectedPackage.packageName,
-        status: 'pending'
+        status: 'initiated'
     });  
     await getPayment.save();
 
@@ -35,9 +35,6 @@ exports.payment = async (req, res) => {
     res.status(500).json({ message: 'Error processing payment' });
   }
 }; 
-
-
-
 
 
 exports.handleFlutterwaveWebhook = async (req, res) => {
