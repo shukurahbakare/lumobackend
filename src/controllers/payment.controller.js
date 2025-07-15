@@ -48,7 +48,8 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
         return res.status(401).send('Unauthorized - Invalid signature');
     }
 
-    const payload = req.body;
+    //const payload = req.body;
+    const payload = JSON.parse(req.body.toString());
 
     if (payload.event === 'charge.completed') {
       const txRef = payload.data.tx_ref;
