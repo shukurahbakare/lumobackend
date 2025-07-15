@@ -3,14 +3,14 @@ const axios = require('axios');
 const User = require('../models/user.model');
 const SolarPackage = require('../models/solarpackages.model');
 
-const generatePaymentLink = async (email, packageID) => {
+const generatePaymentLink = async (email, packageName) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
             throw new Error("User not found");
         }
 
-        const selectedPackage = await SolarPackage.findById(packageID)
+        const selectedPackage = await SolarPackage.findOne({ packageName })
         const response = await axios.post(
             'https://api.flutterwave.com/v3/payments',
             {

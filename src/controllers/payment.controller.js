@@ -21,14 +21,16 @@ exports.payment = async (req, res) => {
 
     const selectedPackage = await SolarPackage.findById(packageID );
 
-    const paymentLink = await generatePaymentLink(user.email, selectedPackage.packageName); 
+    const txRef = `TX_${user._id}_${Date.now()}`
     const getPayment = new Payment ({  // Create new payment 
         userID: user._id,
         packageName: selectedPackage.packageName,
-        status: 'initiated'
-    });  
+        status: 'initiated',
+        txRef: txRef
+    }); 
     await getPayment.save();
 
+    const paymentLink = await generatePaymentLink(user.email, selectedPackage.packageName); 
     res.status(200).json({ message: 'Payment initiated successfully', paymentLink }); 
   } catch (error) {
     console.error('Error processing payment:', error);
@@ -55,6 +57,8 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
       const amount = payload.data.amount;
       const email = payload.data.customer.email;
 
+      console.log("webhook hit!", payload); 
+
         if (status === 'successful') {
 
             const payingUser = await Payment.findOne({ userID }); 
@@ -64,6 +68,7 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
 
             payingUser.status = 'success';
             payingUser.txRef = txRef;
+            payingUser.amount = amount
             await payingUser.save();
 
           console.log(`Payment verified and recorded for ${email}, amount paid: ${amount}`);
