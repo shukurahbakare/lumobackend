@@ -3,21 +3,21 @@ const axios = require('axios');
 const User = require('../models/user.model');
 const SolarPackage = require('../models/solarpackages.model');
 
-const generatePaymentLink = async (email, packageID) => {
+const generatePaymentLink = async (email, packageName) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
             throw new Error("User not found");
         }
 
-        const selectedPackage = await SolarPackage.findById(packageID)
+        const selectedPackage = await SolarPackage.findOne({ packageName })
         const response = await axios.post(
             'https://api.flutterwave.com/v3/payments',
             {
                 tx_ref: `TX_${user._id}_${Date.now()}`,
                 amount: selectedPackage.amount, 
                 currency: 'NGN',
-                redirect_url: 'http://localhost:4900/auth/google/dashboard', //frontend confirmation url
+                redirect_url: 'https://lumobackend.onrender.com', //frontend confirmation url
                 customer: {
                     email: user.email,
                     name: user.name,
