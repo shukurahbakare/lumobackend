@@ -10,6 +10,8 @@ exports.payment = async (req, res) => {
     const { userID } = req.params;
     const { packageID } = req.body;
 
+    console.log(req.body); 
+
     if (!userID) {
       return res.status(400).json({ message: 'User ID is required.' });
     }
@@ -48,28 +50,26 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
         return res.status(401).send('Unauthorized - Invalid signature');
     }
 
-    //const payload = req.body;
-    const payload = JSON.parse(req.body.toString());
+    const payload = req.body;
+    //const payload = JSON.parse(req.body.toString());
 
     if (payload.event === 'charge.completed') {
       const txRef = payload.data.tx_ref;
-      const userID = txRef.split('_')[1]; 
       const status = payload.data.status;
       const amount = payload.data.amount;
       const email = payload.data.customer.email;
 
-      console.log("webhook hit!", payload); 
+      console.log("Flutterwave Webhook hit!", payload)
 
         if (status === 'successful') {
 
-            const payingUser = await Payment.findOne({ userID }); 
+            const payingUser = await Payment.findOneAndUpdate({ txRef }); 
                 if (!payingUser) {
                     return res.status(404).send('User not found');
                 }
 
             payingUser.status = 'success';
-            payingUser.txRef = txRef;
-            payingUser.amount = amount
+            payingUser.amountPaid = amount
             await payingUser.save();
 
           console.log(`Payment verified and recorded for ${email}, amount paid: ${amount}`);

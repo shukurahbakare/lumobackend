@@ -12,15 +12,11 @@ const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
 
-app.post('/api/v1/payment/flutterwave/webhook', express.raw({ type: 'application/json' }),
-  paymentController.handleFlutterwaveWebhook
-);
 
 app.use(cors());
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+app.use(express.json());
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/appliances', appliancesRoutes);
 app.use('/api/v1/payment', paymentRoutes); 
