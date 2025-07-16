@@ -43,15 +43,13 @@ exports.payment = async (req, res) => {
 
 exports.handleFlutterwaveWebhook = async (req, res) => {
   try {
-    const signature = req.headers['verif-hash'];  
-    // Flutterwave sends raw body. We must access raw buffer for signature verification
+    const signature = req.headers['verif-hash']; 
 
     if (!signature || signature !== process.env.FLW_WEBHOOK_SECRET) {
         return res.status(401).send('Unauthorized - Invalid signature');
     }
 
     const payload = req.body;
-    //const payload = JSON.parse(req.body.toString());
 
     if (payload.event === 'charge.completed') {
       const txRef = payload.data.tx_ref;
