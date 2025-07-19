@@ -3,19 +3,18 @@ const axios = require('axios');
 const User = require('../models/user.model');
 const SolarPackage = require('../models/solarpackages.model');
 
-const generatePaymentLink = async (email, packageName) => {
+const generatePaymentLink = async (email, packageName, amount, txRef) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
             throw new Error("User not found");
         }
 
-        const selectedPackage = await SolarPackage.findOne({ packageName })
         const response = await axios.post(
             'https://api.flutterwave.com/v3/payments',
             {
-                tx_ref: `TX_${user._id}`,
-                amount: selectedPackage.amount, 
+                tx_ref: txRef,
+                amount: amount,
                 currency: 'NGN',
                 redirect_url: 'https://lumobackend.onrender.com', //frontend confirmation url
                 customer: {
@@ -25,7 +24,7 @@ const generatePaymentLink = async (email, packageName) => {
                 },
                 customizations: {
                     title: 'LumoGrid Payment',
-                    description: `Payment for ${selectedPackage.packageName} || Solar Package`,
+                    description: `Payment for ${packageName} || Solar Package`,
                     //logo: 'https://res.cloudinary.com/dwx1tdonc/image/upload/v1745532815/ChatGPT_Image_Apr_24_2025_11_10_53_PM_ktlsmn.png',
                 },
             },

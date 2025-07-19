@@ -21,7 +21,7 @@ exports.payment = async (req, res) => {
 
     const selectedPackage = await SolarPackage.findById(packageID );
 
-    const txRef = `TX_${user._id}`
+    const txRef = `TX_${user._id}_${Date.now()}`
     const getPayment = new Payment ({  // Create new payment 
         userID: user._id,
         packageName: selectedPackage.packageName,
@@ -30,7 +30,11 @@ exports.payment = async (req, res) => {
     }); 
     await getPayment.save();
 
-    const paymentLink = await generatePaymentLink(user.email, selectedPackage.packageName); 
+    const paymentLink = await generatePaymentLink(
+                                      user.email,
+                                      selectedPackage.packageName,
+                                      selectedPackage.amount,
+                                      txRef); 
     res.status(200).json({ message: 'Payment initiated successfully', paymentLink }); 
   } catch (error) {
     console.log('Error processing payment:', error);
