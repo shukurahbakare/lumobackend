@@ -10,8 +10,6 @@ exports.payment = async (req, res) => {
     const { userID } = req.params;
     const { packageID } = req.body;
 
-    console.log(req.body); 
-
     if (!userID) {
       return res.status(400).json({ message: 'User ID is required.' });
     }
@@ -35,7 +33,7 @@ exports.payment = async (req, res) => {
     const paymentLink = await generatePaymentLink(user.email, selectedPackage.packageName); 
     res.status(200).json({ message: 'Payment initiated successfully', paymentLink }); 
   } catch (error) {
-    console.error('Error processing payment:', error);
+    console.log('Error processing payment:', error);
     res.status(500).json({ message: 'Error processing payment' });
   }
 }; 
@@ -49,7 +47,7 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
     if (!signature || signature !== process.env.FLW_WEBHOOK_SECRET) {
         return res.status(401).send('Unauthorized - Invalid signature');
     }
-    console.log("Invalid Signature"); 
+    console.log(signature); 
 
     const payload = req.body;
 
