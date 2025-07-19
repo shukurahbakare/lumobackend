@@ -14,7 +14,7 @@ const generatePaymentLink = async (email, packageName) => {
         const response = await axios.post(
             'https://api.flutterwave.com/v3/payments',
             {
-                tx_ref: `TX_${user._id}_${Date.now()}`,
+                tx_ref: `TX_${user._id}`,
                 amount: selectedPackage.amount, 
                 currency: 'NGN',
                 redirect_url: 'https://lumobackend.onrender.com', //frontend confirmation url
