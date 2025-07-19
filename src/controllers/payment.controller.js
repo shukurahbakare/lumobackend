@@ -41,15 +41,14 @@ exports.payment = async (req, res) => {
 
 exports.handleFlutterwaveWebhook = async (req, res) => {
   try {
-    console.log("I hit the webhook")
     const signature = req.headers['verif-hash']; 
 
     if (!signature || signature !== process.env.FLW_WEBHOOK_SECRET) {
         return res.status(401).send('Unauthorized - Invalid signature');
     }
-    console.log(signature); 
 
     const payload = req.body;
+    console.log(payload); 
 
     if (payload.event === 'charge.completed') {
       const txRef = payload.data.tx_ref;
@@ -59,7 +58,7 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
 
         if (status === 'successful') {
 
-            const payingUser = await Payment.findOne({txRef}); 
+            const payingUser = await Payment.findOne({ txRef }); 
             console.log(payingUser); 
                 if (!payingUser) { 
                     return res.status(404).send('User not found');
