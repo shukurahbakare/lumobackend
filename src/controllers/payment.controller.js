@@ -60,8 +60,8 @@ exports.handleFlutterwaveWebhook = async (req, res) => {
         if (status === 'successful') {
 
             const payingUser = await Payment.findOne({ txRef }); 
-                if (!payingUser) {
-                    console.log("checked db, user or payment not found"); 
+            console.log(payingUser); 
+                if (!payingUser) { 
                     return res.status(404).send('User not found');
                 }
                 
