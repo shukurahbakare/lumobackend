@@ -43,37 +43,38 @@ exports.payment = async (req, res) => {
 
 exports.handleFlutterwaveWebhook = async (req, res) => {
   try {
-    const signature = req.headers['verif-hash']; 
+    console.log("I hit the webhook"); 
+    // const signature = req.headers['verif-hash']; 
 
-    if (!signature || signature !== process.env.FLW_WEBHOOK_SECRET) {
-        return res.status(401).send('Unauthorized - Invalid signature');
-    }
+    // if (!signature || signature !== process.env.FLW_WEBHOOK_SECRET) {
+    //     return res.status(401).send('Unauthorized - Invalid signature');
+    // }
 
-    const payload = req.body;
+    // const payload = req.body;
 
-    if (payload.event === 'charge.completed') {
-      const txRef = payload.data.tx_ref;
-      const status = payload.data.status;
-      const amount = payload.data.amount;
-      const email = payload.data.customer.email;
+    // if (payload.event === 'charge.completed') {
+    //   const txRef = payload.data.tx_ref;
+    //   const status = payload.data.status;
+    //   const amount = payload.data.amount;
+    //   const email = payload.data.customer.email;
 
-      console.log("Flutterwave Webhook hit!", payload)
+    //   console.log("Flutterwave Webhook hit!", payload)
 
-        if (status === 'successful') {
+    //     if (status === 'successful') {
 
-            const payingUser = await Payment.findOneAndUpdate({ txRef }); 
-                if (!payingUser) {
-                    return res.status(404).send('User not found');
-                }
+    //         const payingUser = await Payment.findOneAndUpdate({ txRef }); 
+    //             if (!payingUser) {
+    //                 return res.status(404).send('User not found');
+    //             }
 
-            payingUser.status = 'success';
-            payingUser.amountPaid = amount
-            await payingUser.save();
+    //         payingUser.status = 'success';
+    //         payingUser.amountPaid = amount
+    //         await payingUser.save();
 
-          console.log(`Payment verified and recorded for ${email}, amount paid: ${amount}`);
-          return res.status(200).json({ success: true });
-        }
-    }
+    //       console.log(`Payment verified and recorded for ${email}, amount paid: ${amount}`);
+    //       return res.status(200).json({ success: true });
+    //     }
+    // }
   } catch (error) {
   console.log('Error processing webhook:', error);
   return res.status(500).send('Internal server error');

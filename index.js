@@ -4,8 +4,7 @@ const cors = require('cors');
 const connectDb = require('./src/config/db'); 
 const userRoutes = require('./src/routes/user.routes');
 const appliancesRoutes = require('./src/routes/appliances.routes');
-const paymentRoutes = require('./src/routes/payment.routes'); 
-const paymentController = require('./src/controllers/payment.controller'); 
+const paymentRoutes = require('./src/routes/payment.routes');
 
 
 const app = express();
