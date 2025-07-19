@@ -5,7 +5,7 @@ const paymentSchema = new mongoose.Schema({
     packageName: {type: String}, 
     amountPaid: {type: String}, 
     status: {type: String, enum :['success', 'initiated', 'failed']},
-    txRef: {type: String, unique: true, sparse: true}
+    txRef: {type: String, unique: true}
 
 })
 
