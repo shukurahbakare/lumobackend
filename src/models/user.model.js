@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, trim: true, unique: true },
   password: { type: String },
   buildingType: { type: String, required: true,
-     enum: ['Apartment', 'Bungalow', 'Villa', 'Mansion', 'Duplex', 'Studio Apartment'] },
+     enum: ['apartment', 'bungalow', 'villa', 'mansion', 'duplex', 'studio_apartment'] },
   energyHours: { type: Number, required: true },
   appliances: { type: [ApplianceSchema], default: [] },
   totalPower: { type: Number, required: true },
