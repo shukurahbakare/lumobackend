@@ -16,32 +16,33 @@ exports.getRecommendations = async (req, res) => {
 
     const solarPackages = await SolarPackage.find();
 
-    const solarPackageRecommendations = solarPackages.filter(package => 
+    let solarPackageRecommendations = solarPackages.filter(package =>
         package.buildingType.toLowerCase() === user.buildingType.toLowerCase() &&
         package.maxPower >= user.totalPower &&
         package.fullChargeHours >= user.energyHours); 
 
+
+       //if more than 3 packges match, fetch the closest by maxPower
     if (solarPackageRecommendations.length > 3) {
       solarPackageRecommendations.sort((a, b) => a.maxPower - b.maxPower);
       solarPackageRecommendations.length = 3; 
     }
 
     
-    //     //if less than 3 packages match, find extras
-    // if (solarPackageRecommendations.length < 3) { 
-    //   const extras = solarPackages
-    //     .filter(package => !solarPackageRecommendations.includes(package)) // exclude already included packages
-    //     .sort((a, b) => {              
-    //       // Closest power range to user.totalPower
-    //       const diffA = Math.abs(user.totalPower - a.maxPower);
-    //       const diffB = Math.abs(user.totalPower - b.maxPower);
-    //       return diffA - diffB;
-    //     })
-    //     .slice(0, 3 - solarPackageRecommendations.length); // only take what's needed
+        //if less than 3 packages match, find extras
+    if (solarPackageRecommendations.length < 3) {
+      const extras = solarPackages
+        .filter(package => !solarPackageRecommendations.includes(package)) // exclude already included packages
+        .sort((a, b) => {
+          // Closest power range to user.totalPower
+          const diffA = Math.abs(user.totalPower - a.maxPower);
+          const diffB = Math.abs(user.totalPower - b.maxPower);
+          return diffA - diffB;
+        })
+        .slice(0, 3 - solarPackageRecommendations.length); //only fetch 3 packages
 
-    //   solarPackageRecommendations = [...solarPackageRecommendations, ...extras];
-    // }
-
+      solarPackageRecommendations = [...solarPackageRecommendations, ...extras];
+    }
     res.status(200).json({ solarPackageRecommendations, message: 'Recommendations fetched successfully' });
   } catch (error) {
     console.error('Error fetching recommendations:', error);
