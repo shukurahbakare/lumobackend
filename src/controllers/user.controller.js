@@ -18,22 +18,6 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ message: 'User with this phone number already exists.' });
     }
 
-    //calaculating total power based on appliances {for when its ever needed}
-    // let totalPower = 0;
-
-    // for (const appliance of appliances) {
-    //   const applianceDoc = await Appliance.findOne({
-    //     applianceName: appliance.name
-    //   }).select('powerRating');
-
-
-    //   if (!applianceDoc) {
-    //     continue;
-    //   }
-
-    //   totalPower += appliance.count * applianceDoc.powerRating;
-    // }
-
     const newUser = new User({
       name,
       email,
