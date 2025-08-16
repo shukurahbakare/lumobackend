@@ -18,8 +18,9 @@ exports.getRecommendations = async (req, res) => {
 
     let solarPackageRecommendations = solarPackages.filter(package =>
         package.buildingType.toLowerCase() === user.buildingType.toLowerCase() &&
-        package.maxPower >= user.totalPower &&
-        package.fullChargeHours >= user.energyHours); 
+        package.maxPower >= user.totalPower 
+        //&& package.fullChargeHours >= user.energyHours
+      ); 
 
 
        //if more than 3 packges match, fetch the closest by maxPower
