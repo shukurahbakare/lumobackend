@@ -22,7 +22,7 @@ exports.payment = async (req, res) => {
     const selectedPackage = await SolarPackage.findById(packageID );
 
     const txRef = `TX_${user._id}_${Date.now()}`
-    const getPayment = new Payment ({  // Create new payment 
+    const getPayment = new Payment ({ 
         userID: user._id,
         packageName: selectedPackage.packageName,
         status: 'initiated',

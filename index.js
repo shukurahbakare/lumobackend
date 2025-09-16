@@ -5,10 +5,13 @@ const connectDb = require('./src/config/db');
 const userRoutes = require('./src/routes/user.routes');
 const appliancesRoutes = require('./src/routes/appliances.routes');
 const paymentRoutes = require('./src/routes/payment.routes');
+const helmet = require('helmet'); 
 
 
 const app = express();
 dotenv.config();
+app.use(helmet()); 
+
 const PORT = process.env.PORT;
 
 
@@ -25,5 +28,7 @@ app.listen(PORT, () => {
   connectDb();
   console.log(`LumoGrid API is running on port ${PORT}`);
 });
+
+
 
 

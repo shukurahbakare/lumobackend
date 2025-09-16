@@ -16,10 +16,9 @@ exports.getRecommendations = async (req, res) => {
 
     const solarPackages = await SolarPackage.find();
 
-    let solarPackageRecommendations = solarPackages.filter(package =>
-        package.buildingType.toLowerCase() === user.buildingType.toLowerCase() &&
-        package.maxPower >= user.totalPower 
-        //&& package.fullChargeHours >= user.energyHours
+    let solarPackageRecommendations = solarPackages.filter(solarPackage =>
+        solarPackage.buildingType.toLowerCase() === user.buildingType.toLowerCase() &&
+        solarPackage.maxPower >= user.totalPower 
       ); 
 
 
@@ -33,7 +32,7 @@ exports.getRecommendations = async (req, res) => {
         //if less than 3 packages match, find extras
     if (solarPackageRecommendations.length < 3) {
       const extras = solarPackages
-        .filter(package => !solarPackageRecommendations.includes(package)) // exclude already included packages
+        .filter(solarPackage => !solarPackageRecommendations.includes(solarPackage)) // exclude already included packages
         .sort((a, b) => {
           // Closest power range to user.totalPower
           const diffA = Math.abs(user.totalPower - a.maxPower);
