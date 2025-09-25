@@ -42,6 +42,37 @@ exports.payment = async (req, res) => {
   }
 }; 
 
+exports.confirmPaymentReceipt = async (req, res) => {
+      const { tx_ref } = req.params; 
+      try{
+        const confirmPayment = await Payment.findOne({ txRef: tx_ref })
+
+        if(!confirmPayment){
+          return res.status(404).json({ message: "Payment not found"})
+        }
+
+        return res.status(200).json(confirmPayment)
+      }catch(error){
+        console.error("Failed to get payment confirmation/callback", error); 
+        return res.status(500).json("Failed to get payment confirmation", error); 
+      }
+}; 
+
+
+exports.paymentConfirmation = async (req, res) => {
+  const { tx_ref } = req.params;
+  try {
+    const paymentData = await Payment.findOne({ reference: tx_ref }); 
+    if (!paymentData) {
+      return res.status(400).json({ message: "Data not found", error });
+    }
+    return res.status(200).json(paymentData); 
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
+}; 
+
+
 
 exports.handleFlutterwaveWebhook = async (req, res) => {
   try {

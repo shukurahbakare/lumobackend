@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDb = require('./src/config/db'); 
 const userRoutes = require('./src/routes/user.routes');
-const appliancesRoutes = require('./src/routes/appliances.routes');
+const packagesRoutes = require('./src/routes/packages.routes');
 const paymentRoutes = require('./src/routes/payment.routes');
 const helmet = require('helmet'); 
 
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 app.use('/api/v1/user', userRoutes);
-app.use('/api/v1/appliances', appliancesRoutes);
+app.use('/api/v1/appliances', packagesRoutes);
 app.use('/api/v1/payment', paymentRoutes); 
 
 

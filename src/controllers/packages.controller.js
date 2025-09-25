@@ -25,13 +25,4 @@ exports.uploadPackages = async (req, res) => {
   }
 };
 
-exports.getAppliances = async (req, res) => {
-  try {
-    const appliances = await Appliance.find();
-    res.status(200).json(appliances);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching appliances', error });
-  }
-};
-
 

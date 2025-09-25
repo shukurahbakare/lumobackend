@@ -1,7 +1,6 @@
 require('dotenv').config();
 const axios = require('axios');
 const User = require('../models/user.model');
-const SolarPackage = require('../models/solarpackages.model');
 
 const generatePaymentLink = async (email, packageName, amount, txRef) => {
     try {
