@@ -52,7 +52,7 @@ exports.confirmPaymentReceipt = async (req, res) => {
         }
 
         if(confirmPayment.status !== 'success'){
-          return res.status(404).json({ success: false, message: "Payment not successful" });
+          return res.status(400).json({ success: false, message: "Payment not successful" });
         }
         return res.status(200).json({ success: true, payment: confirmPayment });
       } catch (error) {
