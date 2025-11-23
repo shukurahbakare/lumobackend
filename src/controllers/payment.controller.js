@@ -51,7 +51,7 @@ exports.confirmPaymentReceipt = async (req, res) => {
           return res.status(404).json({ message: "Payment not found" });
         }
 
-        if(confirmPayment.paymentStatus !== 'successful'){
+        if(confirmPayment.paymentStatus !== 'success'){
           return res.status(404).json({ message: "Payment not successful" });
         }
         return res.status(200).json({ success: true, payment: confirmPayment });
